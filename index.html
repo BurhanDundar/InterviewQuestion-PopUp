@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    const overlay = document.createElement("div");
+    overlay.style = `
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        z-index: 9999;
+        background-color: rgba(0,0,0,0.4);
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    `;
+    
+    const card = document.createElement("div");
+    card.style = `
+        position: absolute;
+        display: flex;
+        flex-direction: row;
+        width: 50%;
+        height: 400px;
+        top: calc(50%);
+        left: calc(50%);
+        transform: translate(-50%, -50%);
+        border: solid 1px gray;
+        background-color: white;
+        z-index: 10000;
+        min-width = "1000px";
+    `;
+     
+
+    const imageContainer = document.createElement("aside");
+    imageContainer.style = `
+        width: 50%;
+        min-width: 100px;
+        height: 100%;
+        margin: 0;
+        padding: 0; 
+    `;
+
+    const image = document.createElement("img");
+    image.setAttribute("src","https://images.boboscope.com/68fdb597-b4d6-4733-9ca8-803c7d7d5fcf?alt=media&token=0b7b27c3-5b2c-4e79-92b9-e0dcab5e5034&tr=w-1100,c-at_max,f-auto");
+    image.style = `
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    `;
+
+    const formBox = document.createElement("aside");
+    formBox.style = `
+        width: 50%;
+        min-width: 100px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    `;
+
+    // INITIAL FORM
+    const formContainer = document.createElement("div");
+    formContainer.style = `
+        width: 80%;
+        height: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    `;
+
+    const title = document.createElement("H2");
+    title.innerText = "Title";
+    title.style = `margin:0;padding:0;`;
+
+    const shortText = document.createElement("span");
+    shortText.innerText = "Short Text";
+
+    const email = document.createElement("input");
+    email.setAttribute("type","text");
+    email.setAttribute("placeholder","Email");
+    email.style = `
+        height: 24px;
+        border: 2px solid gray;
+        border-radius: 4px;
+        font-size: 18px;
+        padding: 4px;
+        margin-bottom: 4px;
+    `;
+
+    const phone = document.createElement("input");
+    phone.setAttribute("type","text");
+    phone.setAttribute("placeholder","Phone Number");
+    phone.style = `
+        height: 24px;
+        border: 2px solid gray;
+        border-radius: 4px;
+        font-size: 18px;
+        padding: 4px;
+        margin-bottom: 4px;
+    `;
+
+    const submitButton = document.createElement("button");
+    submitButton.innerText = "BE FIRST";
+    submitButton.style = `
+        width: 100%;
+        height: 32px;
+        border: none;
+        background: black;
+        color: white;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+    `;
+
+    submitButton.addEventListener("click",postForm);
+
+    // Accept Form Contract 
+    const approveForm = document.createElement("div");
+    approveForm.style = `
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+    `;
+
+    const approveCheckbox = document.createElement("input");
+    approveCheckbox.setAttribute("type","checkbox");
+
+    const approveText = document.createElement("p");
+    approveText.innerText = "By submitting this form, you are giving consent for your e-mail to be used and disclosed. *";
+    approveText.addEventListener("click",()=>{
+        window.open("https://en.wikipedia.org/wiki/General_Data_Protection_Regulation", "_blank");
+    });
+    approveText.style = `cursor:pointer;`;
+
+    const closeButton = document.createElement("span");
+    closeButton.innerText = "X"
+    closeButton.style = `
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-family: sans-serif;
+        font-size: 18px;
+        cursor: pointer;
+    `;
+    closeButton.addEventListener("click",closeCard);
+
+    // FORM COUPON
+    let couponContainer = document.createElement("div");
+    couponContainer.style = `
+        width: 100%;
+        min-width: 100px;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    `;
+
+    let couponTitle = document.createElement("H2");
+    couponTitle.innerText = "Amazing!";
+    couponTitle.style = `margin:0;padding:0;`;
+
+    let couponDescription = document.createElement("article");
+    couponDescription.innerText = "Here is your discount code you can use in your next order. This coupon code will be valid until 01.01.2020.";
+    couponDescription.style = `font-size: 13px`; 
+
+    let couponCode = document.createElement("input");
+    couponCode.setAttribute("value", "test");
+    couponCode.setAttribute("disabled", "disabled");
+    couponCode.style = `
+        padding: .5rem;
+        border: 2.5px dashed lightgray;
+        align-self: center;
+        width: 70%;
+        text-align: center;
+    `;
+    
+    const copyCouponButton = document.createElement("button");
+    copyCouponButton.innerText = "Copy";
+    copyCouponButton.style = `
+        width: 100%;
+        height: 32px;
+        border: none;
+        background: black;
+        color: white;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 800;
+        cursor: pointer;
+    `;
+    copyCouponButton.addEventListener("click", copyCouponCode);
+
+    couponContainer.appendChild(couponTitle);
+    couponContainer.appendChild(couponDescription);
+    couponContainer.appendChild(couponCode);
+    couponContainer.appendChild(copyCouponButton);
+
+    approveForm.appendChild(approveCheckbox);
+    approveForm.appendChild(approveText);
+
+    formContainer.appendChild(title);
+    formContainer.appendChild(shortText);
+    formContainer.appendChild(email);
+    formContainer.appendChild(phone);
+    formContainer.appendChild(submitButton);
+    formContainer.appendChild(approveForm);
+
+    imageContainer.appendChild(image);
+    
+    formBox.appendChild(formContainer);
+
+    card.appendChild(imageContainer);
+    card.appendChild(formBox);
+    card.appendChild(closeButton);
+
+    overlay.appendChild(card);
+    document.body.appendChild(overlay);
+
+    // POST METHOD
+    async function postData(url = '', data = {}) {
+    const response = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    return response.json(); // parses JSON response into native JavaScript objects
+    }
+    
+    function postForm(){
+
+        let _email = email.value;
+        let _phone = phone.value;
+        let _checkbox = approveCheckbox.checked;
+        
+        if(!_email){
+            alert("Please fill the email area!");
+            return;
+        }
+        if(!_phone){
+            alert("Please fill the phone area!");
+            return;
+        }
+        if(!typeof _phone){
+            alert("Phone number should be number!");
+            return;
+        }
+        if(!_checkbox){
+            alert("Please fill the checkbox area!");
+            return;
+        }
+        
+
+        postData('https://opt-interview-projects.onrender.com/lead-collection', {
+        "phone": Number(_phone),
+        "email": _email
+    }).then((data) => {
+        // Successfull Transaction
+        couponCode.setAttribute("value",data["coupon_code"]);
+        formContainer.innerHTML = "";
+        formContainer.appendChild(couponContainer);
+  }).catch(error => {
+    // Unsuccessful transaction -> invalid email or password
+    alert("Email or password has not valid format. Please try again!");
+  });
+    }
+
+    function closeCard(){
+        overlay.style.display = "none";
+    }
+    
+    async function copyCouponCode(){
+        var copyText = couponCode;
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+        await navigator.clipboard.writeText(copyText.value);
+        alert("Copied the text: " + copyText.value);
+        closeCard();
+    }
+
+
+    // RESPONSIVE DESIGN
+    function adjustSizeToPhoneScreen(screenSize) {
+        let responsiveFontSize = 12;
+        let normalFontSize = 17;
+        if (screenSize.matches) {
+            card.style.width = "90%";
+            email.style.fontSize = responsiveFontSize + 'px';
+            phone.style.fontSize = responsiveFontSize + 'px';
+            approveText.style.fontSize = responsiveFontSize + 'px';
+            submitButton.style.fontSize = responsiveFontSize + 'px';
+        } else {
+            card.style.width = "75%";
+            email.style.fontSize = normalFontSize + 'px';
+            phone.style.fontSize = normalFontSize + 'px';
+            approveText.style.fontSize = normalFontSize + 'px';
+            submitButton.style.fontSize = normalFontSize + 'px';
+        }
+    }
+
+    function adjustSizeToTabletScreen(screenSize) {
+        if(screenSize.matches) {
+            card.style.width = "75%";
+        } else {
+            card.style.width = "50%";
+        }
+    };
+
+    var phoneScreen = window.matchMedia("(max-width: 560px)");
+    adjustSizeToPhoneScreen(phoneScreen);
+    phoneScreen.addListener(adjustSizeToPhoneScreen);
+
+    var tabletScreen = window.matchMedia("(max-width: 1080px)");
+    adjustSizeToTabletScreen(tabletScreen);
+    tabletScreen.addListener(adjustSizeToTabletScreen);
+</script>
+</html>
